@@ -1,0 +1,24 @@
+{
+  "presets": [["react-app", { "modules": true }]],
+  "plugins": [
+    [
+      "babel-plugin-named-asset-import",
+      {
+        "loaderMap": {
+          "svg": {
+            "ReactComponent": "@svgr/webpack?-svgo,+ref![path]"
+          }
+        }
+      }
+    ],
+    ["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }],
+    "@babel/plugin-proposal-optional-chaining",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+    }
+  }
+}
