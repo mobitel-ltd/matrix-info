@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as colors from '@ant-design/colors';
+import { Provider } from 'mobx-react';
 import 'styles/index.css';
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -21,13 +22,15 @@ const theme = {
 };
 
 ReactDOM.render(
-  <ConfigProvider locale={ruRu}>
-    <JssProvider jss={jss}>
-      <ThemeProvider injectFirst theme={theme}>
-        <App user={userStore} />
-      </ThemeProvider>
-    </JssProvider>
-  </ConfigProvider>,
+  <Provider user={userStore}>
+    <ConfigProvider locale={ruRu}>
+      <JssProvider jss={jss}>
+        <ThemeProvider injectFirst theme={theme}>
+          <App />
+        </ThemeProvider>
+      </JssProvider>
+    </ConfigProvider>
+  </Provider>,
   document.getElementById('root'),
 );
 

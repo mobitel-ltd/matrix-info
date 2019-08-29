@@ -1,3 +1,4 @@
 src/registerServiceWorker.js
 src/**/*.css
 node_modules/**
+src/scripts
