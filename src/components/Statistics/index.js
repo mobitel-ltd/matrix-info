@@ -22,7 +22,7 @@ const columns = [
     title: 'дата изменения',
     dataIndex: 'lastEventDate',
     key: 'lastEventDate',
-    sorter: (a, b) => new Date(a.date) - new Date(b.date),
+    sorter: (a, b) => new Date(a.lastEventDate) - new Date(b.lastEventDate),
     sortDirections: ['descend', 'ascend'],
   },
   {
