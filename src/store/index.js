@@ -1,7 +1,7 @@
 import matrixSdk from 'matrix-js-sdk';
 import { observable, action } from 'mobx';
 import { message } from 'antd';
-import { getBaseUrl, getUserId } from 'utils';
+import { getBaseUrl, getUserId, parseRoom } from 'utils';
 
 const spinLoginText = 'login with password';
 const spinSyncText = 'wait for sync with matrix server\n';
@@ -52,7 +52,7 @@ export class UserStore {
         accessToken,
         userId,
       });
-      await matrixClient.startClient();
+      await matrixClient.startClient({ initialSyncLimit: process.env.REACT_APP_EVENTS_LIMIT });
       this.fetchingTip = spinSyncText;
       this.matrixClient = await getReadyClient(matrixClient);
       this.isAuth = true;
@@ -67,7 +67,8 @@ export class UserStore {
   @action('Get rooms')
   getRooms = async () => {
     const allRooms = await this.matrixClient.getRooms();
-    this.rooms = allRooms;
+    this.rooms = allRooms.map(parseRoom);
+    return this.rooms;
   };
 }
 

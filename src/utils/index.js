@@ -1,50 +1,51 @@
-import { groupBy, mapValues } from 'lodash/fp';
-import moment from 'moment';
+import { groupBy, mapValues, head, last, get } from 'lodash/fp';
 import url from 'url';
 
 const protocol = 'https';
 const matrixHost = 'matrix';
+const bots = process.env.REACT_APP_BOTS.split(' ');
 
-export const getLimitTimestamp = limit =>
-  moment()
-    .subtract(limit, 'months')
-    .valueOf();
-
-export const getLastRealSenderEvent = (events, ignoreUsers) =>
-  events.reverse().find(ev => !(ignoreUsers || []).some(user => ev.getSender().includes(user)));
-
-export const SLICE_AMOUNT = 25;
-
-export const isEnglish = val => /[\w]/.test(val);
+// export const isEnglish = val => /[\w]/.test(val);
 
 export const getMatrixHostName = domain => [matrixHost, domain].join('.');
-
-export const parseRoom = ignoreUsers => ({ roomId, name: roomName, timeline }) => {
-  const lastEvent = getLastRealSenderEvent(timeline, ignoreUsers);
-  if (!lastEvent) {
-    return;
-  }
-  const timestamp = lastEvent.getTs();
-  const date = lastEvent.getDate();
-
-  return { roomName, roomId, timestamp, date };
-};
-
-export const getOutdatedRooms = limit => ({ timestamp }) => timestamp < getLimitTimestamp(limit);
 
 export const getBaseUrl = domain => url.format({ protocol, hostname: getMatrixHostName(domain) });
 
 export const getUserId = (userName, domain) => `@${userName}:${getMatrixHostName(domain)}`;
 
-export const getRoomsLastUpdate = (rooms, limit, ignoreUsers) =>
-  rooms
-    .map(parseRoom(ignoreUsers))
-    .filter(Boolean)
-    .filter(getOutdatedRooms(limit))
-    .sort((el1, el2) => el2.timestamp - el1.timestamp);
-
 export const getRoomsUsersCount = rooms =>
-  rooms.map(r => r.currentState.getMembers().length)
-  |> groupBy(x => x)
-  |> mapValues(arr => arr.length)
-  |> Object.entries;
+  rooms.map(({ members }) => members.length) |> groupBy(x => x) |> mapValues(arr => arr.length) |> Object.entries;
+
+const getProjectName = name => {
+  const [h, tail] = name.split('-');
+
+  return tail && h;
+};
+
+const getId = matrixId => matrixId.slice(1).split(':') |> head;
+
+/**
+ * @param {matrixSdk.Room} room matrix room
+ * @returns {{name: string, roomId: string, members: string[], project: string, messages: {sender: string, date: string}[]}}
+ */
+export const parseRoom = room => {
+  const { name } = room;
+  const messages = room.timeline
+    .filter(e => !e.target)
+    .filter(e => !bots.some(bot => e.getSender().includes(bot)))
+    .map(e => ({
+      date: e.getDate(),
+      sender: getId(e.getSender()),
+    }));
+  const members = room.getJoinedMembers().map(({ userId }) => getId(userId));
+  const lastEventDate = last(messages) |> get('date');
+
+  return {
+    name,
+    messages,
+    lastEventDate,
+    members,
+    roomId: room.roomId,
+    project: getProjectName(name),
+  };
+};

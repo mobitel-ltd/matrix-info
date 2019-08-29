@@ -1,9 +1,7 @@
 import { getRoomsUsersCount } from 'utils';
 
 const createRoom = length => ({
-  currentState: {
-    getMembers: () => Array(length),
-  },
+  members: Array(length),
 });
 
 const rooms = [createRoom(10), createRoom(10), createRoom(10), createRoom(10), createRoom(10), createRoom(1)];
