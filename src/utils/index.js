@@ -3,7 +3,7 @@ import url from 'url';
 
 const protocol = 'https';
 const matrixHost = 'matrix';
-const bots = process.env.REACT_APP_BOTS.split(' ');
+export const bots = process.env.REACT_APP_BOTS.split(' ');
 
 // export const isEnglish = val => /[\w]/.test(val);
 
@@ -22,7 +22,7 @@ const getProjectName = name => {
   return tail && h;
 };
 
-const getId = matrixId => matrixId.slice(1).split(':') |> head;
+const takeName = matrixId => matrixId.slice(1).split(':') |> head;
 
 /**
  * @param {matrixSdk.Room} room matrix room
@@ -35,9 +35,9 @@ export const parseRoom = room => {
     .filter(e => !bots.some(bot => e.getSender().includes(bot)))
     .map(e => ({
       date: e.getDate(),
-      sender: getId(e.getSender()),
+      sender: takeName(e.getSender()),
     }));
-  const members = room.getJoinedMembers().map(({ userId }) => getId(userId));
+  const members = room.getJoinedMembers().map(({ userId }) => takeName(userId));
   const lastEventDate = last(messages) |> get('date');
 
   return {
