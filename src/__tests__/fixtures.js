@@ -1,5 +1,5 @@
-import { bots } from 'utils';
-import { random } from 'faker';
+import { bots, getUserId } from 'utils';
+import { random, name } from 'faker';
 
 export const projectName = 'MY';
 
@@ -10,7 +10,10 @@ export const lastEventDate = new Date(2019, 1, 12);
 
 export const roomId = random.alphaNumeric();
 
-export const fakeRooms = users => [
+const fakeMembers = [name, name, name].map(item => item.firstName().toLowerCase());
+const fakeMatrixUsers = fakeMembers.map(getUserId);
+
+export const fakeRooms = (users = fakeMatrixUsers) => [
   {
     roomId,
     name: roomName,

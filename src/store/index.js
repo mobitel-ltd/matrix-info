@@ -52,7 +52,7 @@ export class UserStore {
         accessToken,
         userId,
       });
-      await matrixClient.startClient({ initialSyncLimit: process.env.REACT_APP_EVENTS_LIMIT });
+      await matrixClient.startClient({ initialSyncLimit: Number(process.env.REACT_APP_EVENTS_LIMIT) });
       this.fetchingTip = spinSyncText;
       this.matrixClient = await getReadyClient(matrixClient);
       this.isAuth = true;

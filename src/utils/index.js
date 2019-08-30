@@ -1,5 +1,6 @@
 import { groupBy, mapValues, head, last, get } from 'lodash/fp';
 import url from 'url';
+import { baseColors } from './consts';
 
 const protocol = 'https';
 const matrixHost = 'matrix';
@@ -19,7 +20,7 @@ export const getRoomsUsersCount = rooms =>
 const getProjectName = name => {
   const [h, tail] = name.split('-');
 
-  return tail && h;
+  return tail ? h : 'custom room';
 };
 
 const takeName = matrixId => matrixId.slice(1).split(':') |> head;
@@ -48,4 +49,11 @@ export const parseRoom = room => {
     roomId: room.roomId,
     project: getProjectName(name),
   };
+};
+
+export const getGroupedByProjects = rooms => groupBy('project', rooms) |> Object.entries;
+
+export const getColors = (len, cur = 0) => {
+  const currentColor = cur > baseColors.length - 1 ? 0 : cur;
+  return len ? [baseColors[currentColor], ...getColors(len - 1, currentColor + 1)] : [];
 };
