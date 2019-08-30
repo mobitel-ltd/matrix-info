@@ -1,4 +1,4 @@
-import { groupBy, mapValues, head, last, get } from 'lodash/fp';
+import { groupBy, head, last, get } from 'lodash/fp';
 import url from 'url';
 import { baseColors } from './consts';
 
@@ -14,8 +14,7 @@ export const getBaseUrl = domain => url.format({ protocol, hostname: getMatrixHo
 
 export const getUserId = (userName, domain) => `@${userName}:${getMatrixHostName(domain)}`;
 
-export const getRoomsUsersCount = rooms =>
-  rooms.map(({ members }) => members.length) |> groupBy(x => x) |> mapValues(arr => arr.length) |> Object.entries;
+export const getRoomsUsersCount = rooms => groupBy(({ members }) => members.length, rooms) |> Object.entries;
 
 const getProjectName = name => {
   const [h, tail] = name.split('-');

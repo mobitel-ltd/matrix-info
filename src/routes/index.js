@@ -1,16 +1,7 @@
 import Home from 'pages/home';
-import Actions from 'components/Actions';
 import Statistics from 'components/Statistics';
 
 const menuRoutes = [
-  {
-    key: 'actions',
-    component: Actions,
-    path: '/actions',
-    title: 'Управление аккаунтом MATRIX',
-    subTitle: 'Действия',
-    icon: 'ordered-list',
-  },
   {
     key: 'statistics',
     component: Statistics,

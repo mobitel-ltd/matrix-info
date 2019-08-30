@@ -15,7 +15,9 @@ const createRoom = length => ({
   members: Array(length),
 });
 
-const rooms = [createRoom(10), createRoom(10), createRoom(10), createRoom(10), createRoom(10), createRoom(1)];
+const group1 = [createRoom(10), createRoom(10), createRoom(10), createRoom(10), createRoom(10)];
+const group2 = [createRoom(1)];
+const rooms = [...group1, ...group2];
 
 let fakeMembers;
 let fakeMatrixUsers;
@@ -26,7 +28,7 @@ beforeEach(() => {
 });
 
 it('Test rooms users count', () => {
-  expect(getRoomsUsersCount(rooms)).toEqual([['1', 1], ['10', 5]]);
+  expect(getRoomsUsersCount(rooms)).toEqual([['1', group2], ['10', group1]]);
 });
 
 it('Expect parseRoom work correct', () => {
