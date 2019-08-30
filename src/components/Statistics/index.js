@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import { Table } from 'antd';
 
 const columns = [
   {
-    title: '№',
-    dataIndex: 'roomId',
-    key: 'roomId',
+    title: 'проект',
+    dataIndex: 'project',
+    key: 'project',
     sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ['descend', 'ascend'],
   },
@@ -15,7 +15,9 @@ const columns = [
     title: 'Наименование',
     dataIndex: 'name',
     key: 'name',
-    sorter: (a, b) => a.name.length - b.name.length,
+    sorter: (a, b) => {
+      return a.name.localeCompare(b.name);
+    },
     sortDirections: ['descend', 'ascend'],
   },
   {
@@ -26,26 +28,69 @@ const columns = [
     sortDirections: ['descend', 'ascend'],
   },
   {
-    title: 'проект',
-    dataIndex: 'project',
-    key: 'project',
+    title: 'Количество пользователей',
+    dataIndex: 'countMembers',
+    key: 'countMembers',
+    sorter: (a, b) => a.countMembers - b.countMembers,
+    sortDirections: ['descend', 'ascend'],
+  },
+  {
+    title: 'Коилечтво сообщений',
+    dataIndex: 'countMessages',
+    key: 'countMessages',
+    sorter: (a, b) => a.countMessages - b.countMessages,
+    sortDirections: ['descend', 'ascend'],
+  },
+  {
+    title: '№',
+    dataIndex: 'roomId',
+    key: 'roomId',
     sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ['descend', 'ascend'],
   },
 ];
 
+const title = () => 'Статистика по комнатам';
+
+const expandedRowRender = record => (
+  <ul>
+    {record.members.map((member, ind) => (
+      <li key={ind}>{member}</li>
+    ))}
+  </ul>
+);
+
+const rowSelection = setSelectedRooms => ({
+  onSelect: (_, __, selectedRows) => setSelectedRooms(selectedRows),
+  onSelectAll: (_, selectedRows) => setSelectedRooms(selectedRows),
+});
+
 const Statistics = ({ user: { rooms } }) => {
-  const data = rooms.map(({ roomId, name, lastEventDate, project }) => {
+  // eslint-disable-next-line no-unused-vars
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  const data = rooms.map(({ roomId, name, lastEventDate, project, messages, members }) => {
     const lastDate = moment(lastEventDate);
     return {
       key: roomId,
       roomId,
       name,
+      members,
+      countMembers: members.length,
+      countMessages: messages.length,
       lastEventDate: lastDate.format('YYYY-MM-DD hh:mm'),
       project,
     };
   });
-  return <Table bordered columns={columns} dataSource={data} />;
+  return (
+    <Table
+      rowSelection={rowSelection(setSelectedRooms)}
+      title={title}
+      expandedRowRender={expandedRowRender}
+      bordered
+      columns={columns}
+      dataSource={data}
+    />
+  );
 };
 
 export default inject('user')(observer(Statistics));
