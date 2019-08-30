@@ -5,7 +5,7 @@ import { Table } from 'antd';
 
 const columns = [
   {
-    title: 'проект',
+    title: 'Проект',
     dataIndex: 'project',
     key: 'project',
     sorter: (a, b) => a.name.length - b.name.length,
@@ -21,7 +21,7 @@ const columns = [
     sortDirections: ['descend', 'ascend'],
   },
   {
-    title: 'дата изменения',
+    title: 'Дата изменения',
     dataIndex: 'lastEventDate',
     key: 'lastEventDate',
     sorter: (a, b) => new Date(a.lastEventDate) - new Date(b.lastEventDate),
@@ -35,17 +35,10 @@ const columns = [
     sortDirections: ['descend', 'ascend'],
   },
   {
-    title: 'Коилечтво сообщений',
+    title: 'Количество сообщений',
     dataIndex: 'countMessages',
     key: 'countMessages',
     sorter: (a, b) => a.countMessages - b.countMessages,
-    sortDirections: ['descend', 'ascend'],
-  },
-  {
-    title: '№',
-    dataIndex: 'roomId',
-    key: 'roomId',
-    sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ['descend', 'ascend'],
   },
 ];
@@ -72,7 +65,6 @@ const Statistics = ({ user: { rooms } }) => {
     const lastDate = moment(lastEventDate);
     return {
       key: roomId,
-      roomId,
       name,
       members,
       countMembers: members.length,

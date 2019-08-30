@@ -1,7 +1,7 @@
 import React from 'react';
 import { getGroupedByProjects, getColors } from 'utils';
 import { Pie } from 'react-chartjs-2';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 
 const RoomsPie = ({ user: { rooms } }) => {
   const groupedByProjects = getGroupedByProjects(rooms);
@@ -16,12 +16,7 @@ const RoomsPie = ({ user: { rooms } }) => {
     ],
   };
 
-  return (
-    <div>
-      <h2>Pie Example</h2>
-      <Pie data={dataPie} />
-    </div>
-  );
+  return <Pie data={dataPie} />;
 };
 
-export default observer(RoomsPie);
+export default inject('user')(observer(RoomsPie));
