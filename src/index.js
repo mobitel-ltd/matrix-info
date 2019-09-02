@@ -12,6 +12,7 @@ import * as serviceWorker from 'serviceWorker';
 import 'antd/dist/antd.css';
 import App from 'app';
 import userStore from 'store';
+import * as mocks from 'mocks';
 
 moment.locale('ru');
 
@@ -21,8 +22,10 @@ const theme = {
   colors,
 };
 
+const store = process.env.REACT_APP_USE_MOCK ? mocks.store : userStore;
+
 ReactDOM.render(
-  <Provider user={userStore}>
+  <Provider user={store}>
     <ConfigProvider locale={ruRu}>
       <JssProvider jss={jss}>
         <ThemeProvider injectFirst theme={theme}>

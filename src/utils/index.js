@@ -16,11 +16,13 @@ export const getUserId = (userName, domain) => `@${userName}:${getMatrixHostName
 
 export const getRoomsUsersCount = rooms => groupBy(({ members }) => members.length, rooms) |> Object.entries;
 
-const getProjectName = name => {
+export const getProjectName = name => {
   const [h, tail] = name.split('-');
 
   return tail ? h : 'custom room';
 };
+
+export const getLastEventDate = messages => last(messages) |> get('date');
 
 const takeName = matrixId => matrixId.slice(1).split(':') |> head;
 
@@ -38,12 +40,11 @@ export const parseRoom = room => {
       sender: takeName(e.getSender()),
     }));
   const members = room.getJoinedMembers().map(({ userId }) => takeName(userId));
-  const lastEventDate = last(messages) |> get('date');
 
   return {
     name,
     messages,
-    lastEventDate,
+    lastEventDate: getLastEventDate(messages),
     members,
     roomId: room.roomId,
     project: getProjectName(name),
