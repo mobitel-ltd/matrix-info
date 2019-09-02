@@ -651,3 +651,39 @@ exports[`render correctly text component 1`] = `
   </div>
 </div>
 `;
+
+exports[`render with enzim 1`] = `
+<Statistics
+  user={
+    Object {
+      "rooms": Array [
+        Object {
+          "lastEventDate": 2019-02-11T21:00:00.000Z,
+          "members": Array [
+            "ivanov",
+            "petrov",
+            "sidorov",
+          ],
+          "messages": Array [
+            Object {
+              "date": 2018-11-11T21:00:00.000Z,
+              "sender": "ivanov",
+            },
+            Object {
+              "date": 2019-01-11T21:00:00.000Z,
+              "sender": "petrov",
+            },
+            Object {
+              "date": 2019-02-11T21:00:00.000Z,
+              "sender": "sidorov",
+            },
+          ],
+          "name": "MY-123",
+          "project": "MY",
+          "roomId": "2",
+        },
+      ],
+    }
+  }
+/>
+`;
