@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getGroupedByProjects, getColors } from 'utils';
 import { Pie } from 'react-chartjs-2';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import Statistics from 'components/Statistics';
 
 const RoomsPie = ({ user: { rooms } }) => {
+  const [selectedRooms, setSelectedRooms] = useState([]);
+
   const groupedByProjects = getGroupedByProjects(rooms);
   const backgroundColor = getColors(groupedByProjects.length);
   const dataPie = {
@@ -16,12 +19,17 @@ const RoomsPie = ({ user: { rooms } }) => {
     ],
   };
 
+  const onClick = ([{ _index: index }]) => {
+    const [, handleRooms] = groupedByProjects[index];
+    setSelectedRooms(handleRooms);
+  };
+
   return (
     <div>
-      <h2>Pie Example</h2>
-      <Pie data={dataPie} />
+      <Pie data={dataPie} onElementsClick={onClick} />
+      {selectedRooms.length && <Statistics user={{ rooms: selectedRooms }} />}
     </div>
   );
 };
 
-export default observer(RoomsPie);
+export default inject('user')(observer(RoomsPie));
