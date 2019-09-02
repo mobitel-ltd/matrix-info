@@ -71,7 +71,7 @@ export const parsedRoomsFactory = () => {
     messages: sortBy(messages, 'date'),
     lastEventDate: getLastEventDate(messages),
     members,
-    roomId: faker.random.alphaNumeric(),
+    roomId: faker.random.uuid(),
     project: getProjectName(name),
   };
 };
