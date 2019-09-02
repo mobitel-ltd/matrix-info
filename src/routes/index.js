@@ -1,7 +1,6 @@
 import Home from 'pages/home';
 import Statistics from 'components/Statistics';
-import ProjectPie from 'components/Pies/Project';
-import UserPie from 'components/Pies/Users';
+import Graphics from 'components/Pies';
 
 const menuRoutes = [
   {
@@ -13,19 +12,11 @@ const menuRoutes = [
     icon: 'idcard',
   },
   {
-    key: 'project',
-    component: ProjectPie,
-    path: '/graphics/project',
+    key: 'Графика',
+    component: Graphics,
+    path: '/graphics',
     title: 'Управление аккаунтом MATRIX',
-    subTitle: 'Графика по проектам',
-    icon: 'idcard',
-  },
-  {
-    key: 'users',
-    component: UserPie,
-    path: '/graphics/users',
-    title: 'Управление аккаунтом MATRIX',
-    subTitle: 'Графика по пользователям',
+    subTitle: 'Графика',
     icon: 'idcard',
   },
 ];

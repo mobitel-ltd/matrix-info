@@ -77,6 +77,7 @@ const Statistics = ({ user: { rooms } }) => {
     <Table
       rowSelection={rowSelection(setSelectedRooms)}
       title={title}
+      pagination={{ pageSize: 50 }}
       expandedRowRender={expandedRowRender}
       bordered
       columns={columns}

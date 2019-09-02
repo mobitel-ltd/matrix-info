@@ -14,8 +14,6 @@ export const getBaseUrl = domain => url.format({ protocol, hostname: getMatrixHo
 
 export const getUserId = (userName, domain) => `@${userName}:${getMatrixHostName(domain)}`;
 
-export const getRoomsUsersCount = rooms => groupBy(({ members }) => members.length, rooms) |> Object.entries;
-
 const getProjectName = name => {
   const [h, tail] = name.split('-');
 
@@ -50,7 +48,15 @@ export const parseRoom = room => {
   };
 };
 
+export const getRoomsUsersCount = rooms => groupBy(({ members }) => members.length, rooms) |> Object.entries;
 export const getGroupedByProjects = rooms => groupBy('project', rooms) |> Object.entries;
+
+const groupedFunc = {
+  user: getRoomsUsersCount,
+  project: getGroupedByProjects,
+};
+
+export const getGroupedData = type => rooms => groupedFunc[type](rooms);
 
 export const getColors = (len, cur = 0) => {
   const currentColor = cur > baseColors.length - 1 ? 0 : cur;
